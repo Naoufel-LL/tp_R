@@ -1,0 +1,176 @@
+---
+title: "Naoufal Bahassoune"éz
+date: "2024-03-02"
+date: "`r format(Sys.Date(),'%e de %B, %Y')`"
+
+---
+1)Charger le dataset 
+
+```{r}
+library(ggplot2)
+df = read.csv("C:\\Users\\dell\\Documents\\tp_vis\\data.csv")
+head(df)
+```
+
+2)Changer les noms des colonnes 
+```{r}
+colnames(df)<- c("Film","Genre","Rating_Tomatoes","Rating_Audience","Budget","Year")
+head(df)
+```
+3)Convertir 'criticsratings','audienceratings' en numeric
+
+```{r}
+df[,3] <- as.numeric(as.character(df[,3]))
+df[,4] <- as.numeric(as.character(df[,4]))
+```
+4)Affiche le type de données de chaque colonne, le nombre d'observations, etc.
+```{r}
+sapply(df, typeof)
+
+```
+1.  Distribution des ratings d'Rotten Tomatoes (histogramme)
+```{r}
+tomato_hist = ggplot(df, aes(x = Rating_Tomatoes)) +
+geom_histogram(color = "black", fill = "steelblue") +
+labs(x = "Average Income", y = "Frequency") +
+ggtitle("Histogram of Average Income") +
+theme_minimal()
+tomato_hist
+```
+2.  Distribution des ratings d’audience (histogramme)
+```{r}
+audience_hist = ggplot(df, aes(x = Rating_Audience)) +
+geom_histogram(color = "black", fill = "red") +
+labs(x = "Average Income", y = "Frequency") +
+ggtitle("Histogram of Average Income") +
+theme_minimal()
+audience_hist
+```
+3.  Relations entre Rotten Tomatoes ratings et ratings d’audience (point) 
+```{r}
+point_hist1=ggplot(df, aes(x = Rating_Tomatoes, y = Rating_Audience)) +
+geom_point() +
+labs(title = "Nuage de points entre Rating_Tomatoes et Rating_Audience",
+x = "Budget",
+y = "Rating_Audience")
+point_hist1
+```
+4.  Relations entre budget et Rotten Tomatoes ratings (point) 
+
+```{r}
+point_hist2=ggplot(df, aes(x = Budget, y = Rating_Tomatoes)) +
+    geom_point() +
+    labs(title = "Nuage de points entre Budget et Rating_Tomatoes",
+    x = "Budget",
+    y = "Rating_Audience")
+    point_hist2
+```
+5.  Relations entre budget et ratings audience (point) 
+
+```{r}
+point_hist2=ggplot(df, aes(x = Budget, y = Rating_Audience)) +
+    geom_point() +
+    labs(title = "Nuage de points entre Budget et Rating_Tomatoes",
+    x = "Budget",
+    y = "Rating_Audience")
+    point_hist2
+    
+```
+6.  La répartition des films en fonction de leur catégorie (bar) 
+
+```{r}
+ggplot(df, aes(x = Genre)) +
+geom_bar(fill = "orange", color = "black", alpha = 0.7, width = 0.6) +
+labs(title = "Distribution of Movies by Category", x = "Category", y = "Number of Movies") +
+theme_minimal()
+```
+7.  La distribution des catégories au fil des ans (bar) 
+```{r}
+ggplot(df, aes(x = Year, fill = Genre)) +
+geom_bar(position = "stack") +
+labs(title = "Distribution of Categories Over the Years", x = "Year", y = "Number of Movies") +
+theme_minimal()
+```
+8.  La distribution des audience ratings(moyenne) dans différents genres (bar)
+```{r}
+library(dplyr)
+average_ratings <- df %>%
+group_by(Genre) %>%
+summarise(Average_Rating = mean(Rating_Audience))
+ggplot(average_ratings, aes(x = Genre, y = Average_Rating)) +
+geom_bar(stat = "identity", fill = "brown", color = "black") +
+labs(title = "Distribution of Audience Ratings (Average) in Different Genres", x = "Genre", y = "Average Rating") +
+theme_minimal()
+ggplot(average_ratings, aes(x = Genre, y = Average_Rating)) +
+geom_bar(stat = "identity", fill = "yellow", color = "black") +
+labs(title = "Distribution of Audience Ratings (Average) in Different Genres", x = "Genre", y = "Average Rating") +
+theme_minimal()
+```
+
+9.  La distribution des budgets dans différents genres (boxplot) 
+```{r}
+total_budgets <- df %>%
+group_by(Genre) %>%
+summarise(Total_Budget = sum(Budget))
+ggplot(df, aes(x = Genre, y = Budget, fill = Genre)) +
+geom_boxplot() +
+labs(title = "Distribution of Budgets in Different Genres", x = "Genre", y = "Budget") +
+theme_minimal()
+
+```
+10.  La distribution des Rotten Tomatoes ratings par genre des films(bar) 
+```{r}
+ggplot(df, aes(x = Genre, y = 'Rating_Tomatoes', fill = Genre)) +
+geom_bar(stat = "identity") +
+labs(title = "Distribution of Rotten Tomatoes Ratings by Genre", x = "Genre", y = "Rotten Tomatoes Rating") +
+theme_minimal()
+
+```
+11. Le budget des films par catégorie (pie) 
+```{r}
+total_budgets <- df %>%
+  group_by(Genre) %>%
+  summarise(Total_Budget = sum(Budget))
+ggplot(total_budgets, aes(x = "", y = Total_Budget, fill = Genre)) +
+geom_bar(stat = "identity", width = 1) +
+coord_polar("y", start = 0) +
+labs(title = "Budget of Films by Category", x = "", y = "") +
+theme_void() +
+theme(legend.position = "bottom")
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
